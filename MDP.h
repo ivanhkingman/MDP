@@ -8,15 +8,15 @@
 #ifndef _MDP_H_
 #define _MDP_H_
 
-using namespace		std;
-using probability	= float;
-using Action		= int;
+using namespace	std;
+using probability = float;
+using Action = int;
 
 template<typename T>
 struct transition {
-	State<T>	fromState;
-	State<T>	toState;
-	Action		withAction;
+	State<T> fromState;
+	State<T> toState;
+	Action withAction;
 };
 
 template<typename T>
@@ -24,14 +24,14 @@ class MDP {
 private:
 
 	// Fundamental MDP variables
-	set<State<T>>					m_states;
-	map<State<T>, float>			m_rewardMap;
-	map<transition<T>, probability>	m_stateTransitionMap;
-	enum							m_actions;
+	set<State<T>> m_states;
+	map<State<T>, float> m_rewardMap;
+	map<transition<T>, probability> m_stateTransitionMap;
+	enum m_actions;
 
 	// Associated with policy- and value iteration
-	map<State<T>, int>				m_utilityMap;
-	map<State<T>, Action>			m_policyMap;
+	map<State<T>, int> m_utilityMap;
+	map<State<T>, Action> m_policyMap;
 
 	// Initialization routines
 	bool zeroInitializeStateSpace() {
