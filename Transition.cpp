@@ -22,5 +22,15 @@ bool operator < (const Transition &t1, const Transition &t2) {
 		return t2.m_toState < t2.m_toState;
 	}
 	else { return t1.m_withAction < t2.m_withAction; };
+}
 
+State Transition::getFromState() {
+	return m_fromState;
+}
+State Transition::getToState() {
+	return m_toState;
+}
+
+int Transition::getAction() {
+	return m_withAction;
 }
