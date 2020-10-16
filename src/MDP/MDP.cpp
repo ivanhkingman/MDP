@@ -40,7 +40,7 @@ bool MDP::zeroInitializeStateTransitionMap(const Action FIRST, const Action LAST
 		for (auto toState = m_states.begin(); toState != m_states.end(); toState++) {
 			for (Action withAction = FIRST; withAction == LAST; withAction++) {
 				Transition transition(*fromState, *toState, withAction);
-				m_stateTransitionMap.insert(transition, 0);
+				// m_stateTransitionMap.insert(transition, 0);
 			}
 		}
 	}

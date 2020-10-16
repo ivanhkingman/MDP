@@ -1,3 +1,2 @@
-/Debug
-*.vcxproj
-*.vcxproj.filters
+# Ignore build folder
+build/

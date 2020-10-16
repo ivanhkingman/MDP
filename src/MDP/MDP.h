@@ -19,7 +19,7 @@ private:
 	set<State> m_states;
 	map<State, float> m_rewardMap;
 	map<Transition, probability> m_stateTransitionMap;
-	enum m_actions;
+	enum m_actions {};
 	map<State, int> m_utilityMap;
 	map<State, Action> m_policyMap;
 
