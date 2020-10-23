@@ -2,6 +2,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include "transition.hpp"
 
 using namespace std;
 
@@ -10,19 +11,10 @@ using probability = double;
 using action = int;
 using reward = int;
 
-struct transition {
-    state fromState;
-    state toState;
-    action withAction;
-};
-
 using stateSpace = set<state>;
-using transitionMap = map<transition, probability>;
+using transitionMap = map<int, probability>;
 using actionSpace = set<action>;
 using rewardMap = map<state, reward>;
-
-
-
 
 class MDP {
 public:
