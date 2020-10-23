@@ -30,7 +30,12 @@ void MDP::printStateSpace() {
     }
 }
 void MDP::printTransitionMap() {
-    
+    for (auto transitionProb = m_T.begin(); transitionProb != m_T.end(); transitionProb++) {
+        Transition transition = transitionProb->first;
+        probability prob = transitionProb->second;
+        transition.print(); 
+        cout << " har probability of: " << prob << endl;
+    }
 }
 
 void MDP::printActionSpace() {

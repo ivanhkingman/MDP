@@ -1,4 +1,5 @@
 #include <vector>
+#include <iostream>
 using namespace std;
 
 using state = vector<int>;
@@ -21,8 +22,9 @@ public:
     void printLeavingState();
     void printEnteringState();
     void printWithAction();
+    void print();
 
-    
+    friend bool operator < (const Transition &t1, const Transition &t2);
 
 private:
     state m_leavingState;

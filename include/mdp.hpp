@@ -12,7 +12,7 @@ using action = int;
 using reward = int;
 
 using stateSpace = set<state>;
-using transitionMap = map<int, probability>;
+using transitionMap = map<Transition, probability>;
 using actionSpace = set<action>;
 using rewardMap = map<state, reward>;
 

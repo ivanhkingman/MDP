@@ -23,9 +23,20 @@ int main(){
     actionSpace myActionSpace = {UP, DOWN, LEFT, RIGHT};
     myMDP.setActionSpace(myActionSpace);
 
-    myMDP.printActionSpace();
+    state st1 = {0, 0};
+    state st2 = {1, 2};
+    action a1 = UP;
+    action a2 = DOWN;
 
-    Transition myTransition;
+    Transition transition1(st1, st2, a1);
+    Transition transition2(st2, st1, a2);
+
+    transitionMap myMap;
+    myMap.insert(pair<Transition, double>(transition1, 0.5));
+    myMap.insert(pair<Transition, double>(transition2, 0.4));
+
+    myMDP.setTransitionMap(myMap);
+    myMDP.printTransitionMap();
     
     return 0;
 }
