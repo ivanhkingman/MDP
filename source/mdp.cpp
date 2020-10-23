@@ -29,7 +29,9 @@ void MDP::printStateSpace() {
         cout << endl;
     }
 }
-void printTransitionMap() {}
+void MDP::printTransitionMap() {
+    
+}
 
 void MDP::printActionSpace() {
     for (auto action = m_A.begin(); action != m_A.end(); action++) {
@@ -46,6 +48,13 @@ void MDP::printRewardMap() {
         cout << "] is " << state->second << endl;
     }
 };
+
+void MDP::print() {
+    this->printStateSpace();
+    this->printTransitionMap();
+    this->printActionSpace();
+    this->printRewardMap();
+}
 
 stateSpace getStateSpace();
 transitionMap getTransitionMap();

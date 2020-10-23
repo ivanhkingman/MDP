@@ -10,10 +10,18 @@ using probability = double;
 using action = int;
 using reward = int;
 
+struct transition {
+    state fromState;
+    state toState;
+    action withAction;
+};
+
 using stateSpace = set<state>;
-using transitionMap = map<state, probability>;
+using transitionMap = map<transition, probability>;
 using actionSpace = set<action>;
 using rewardMap = map<state, reward>;
+
+
 
 
 class MDP {
@@ -36,6 +44,7 @@ public:
     void printTransitionMap();
     void printActionSpace();
     void printRewardMap();
+    void print();
 
 private:
     
@@ -43,4 +52,5 @@ private:
     rewardMap m_R;
     stateSpace m_S;
     actionSpace m_A;
+    
 };
