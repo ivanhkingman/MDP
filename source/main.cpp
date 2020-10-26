@@ -28,7 +28,5 @@ int main(){
     myMDP.setTransitionMap(myTransitionMap);
     myMDP.printTransitionMap();
 
-    
-    
     return 0;
 }
