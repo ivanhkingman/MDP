@@ -34,7 +34,7 @@ void MDP::printTransitionMap() {
         Transition transition = transitionProb->first;
         probability prob = transitionProb->second;
         transition.print(); 
-        cout << " har probability of: " << prob << endl;
+        cout << " has probability of: " << prob << endl;
     }
 }
 
