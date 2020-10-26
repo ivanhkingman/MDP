@@ -32,3 +32,6 @@ state getTileBelow(state fromState);
 state getTileAbove(state fromState);
 state getTileToLeft(state fromState);
 state getTileToRight(state fromState);
+
+action flipClockWize(action moveDirection);
+action flipCounterClockwize(action moveDirection);

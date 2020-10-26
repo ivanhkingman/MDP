@@ -3,8 +3,6 @@ cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 #Project name
 project(MDP)
 
-
-
 #Where to find the included source files
 include_directories(include)
 

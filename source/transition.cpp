@@ -66,21 +66,6 @@ void Transition::print() {
 
 bool operator < (const Transition &t1, const Transition &t2) {
 
-    /*
-    if (t1.m_leavingState != t2.m_leavingState) {
-		return t1.m_leavingState < t2.m_leavingState;
-	}
-	if (t1.m_enteringState != t2.m_enteringState) {
-		return t2.m_enteringState < t2.m_enteringState;
-	}
-    if (t1.m_withAction != t2.m_withAction) {
-        return t1.m_withAction < t2.m_withAction;
-    }
-    else {
-        return t1.m_withAction < t2.m_withAction;
-    }
-    */
-
     if (t1.m_leavingState < t2.m_leavingState) return true;
     if (t1.m_leavingState > t2.m_leavingState) return false;
 

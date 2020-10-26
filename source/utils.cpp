@@ -164,6 +164,7 @@ void fillIncompleteTransitionMap(transitionMap &T, actionSpace A, stateSpace S) 
 }
 
 
+
 bool isOnUpperEdge(state state, int dim) {
     return (state[1] == dim-1);
 }
@@ -198,4 +199,46 @@ state getTileToLeft(state fromState) {
 state getTileToRight(state fromState) {
     state tileToRight = {fromState[0] + 1, fromState[1]};
     return tileToRight;
+}
+
+action flipCounterClockwize(action moveDirection) {
+    switch (moveDirection) {
+        case UP:
+            moveDirection = LEFT;
+            break;
+        case DOWN:
+            moveDirection = RIGHT;
+            break;
+        case LEFT:
+            moveDirection = DOWN;
+            break;
+        case RIGHT:
+            moveDirection = UP;
+            break;
+        default:
+            cout << "Something went wrong!" << endl;
+            break;
+    }
+}
+
+action flipClockwize(action moveDirection) {
+    switch(moveDirection) {
+        case UP:
+            moveDirection = RIGHT;
+            break;
+        case DOWN:
+            moveDirection = LEFT;
+            break;
+        case LEFT:
+            moveDirection = UP;
+            break;
+        case RIGHT:
+            moveDirection = DOWN;
+            break;
+        default:
+            cout << "Something went wrong!" << endl;
+            break;
+
+    }
+    
 }
