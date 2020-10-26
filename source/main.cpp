@@ -19,15 +19,16 @@ int main(){
     myMDP.setRewardMap(myRewardMap);
 
     // Create and set actions for the agent
-    enum actions {UP, DOWN, LEFT, RIGHT};
-    actionSpace myActionSpace = {UP, DOWN, LEFT, RIGHT};
+    
+    actionSpace myActionSpace = {actions::UP, actions::DOWN, actions::LEFT, actions::RIGHT};
     myMDP.setActionSpace(myActionSpace);
 
     // Create and set transitions for the agent
-    transitionMap myTransitionMap = generateZeroTransitionMap(myActionSpace, myStateSpace);
+    transitionMap myTransitionMap = generateGridWorldTransitionMap(4, myActionSpace, myStateSpace);
     myMDP.setTransitionMap(myTransitionMap);
-    
     myMDP.printTransitionMap();
+
+    
     
     return 0;
 }
