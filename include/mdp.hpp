@@ -26,6 +26,7 @@ public:
     transitionMap getTransitionMap();
     actionSpace getActionSpace();
     rewardMap getRewardMap();
+    int getSize();
 
     void setStateSpace(stateSpace S);
     void setTransitionMap(transitionMap T);
@@ -44,5 +45,6 @@ private:
     rewardMap m_R;
     stateSpace m_S;
     actionSpace m_A;
+    int m_N;
     
 };

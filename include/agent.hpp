@@ -1,5 +1,5 @@
 #include <vector>
-#include "mdp.hpp"
+#include "utils.hpp"
 
 using namespace std;
 
@@ -13,10 +13,14 @@ public:
 
     void attemptMove(action moveDirection);
     void executeMove(action moveDirection);
+    void collectReward();
+    void printPosition();
     state getPosition();
     
+    void setMDP(MDP mdp);
 
 private:
     state m_state;
     MDP m_mdp;
+    int m_totalReward;
 };

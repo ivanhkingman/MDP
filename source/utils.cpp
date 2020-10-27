@@ -15,9 +15,9 @@ stateSpace create2DGridWorld(int size) {
     return gridWorld;  
 }
 
-void printGridWolrd(int dim, state position) {
-    for (int x = 0;  x < dim; x++ ) {
-        for (int y = 0; y < dim; y++) {
+void printGridWorld(int dim, state position) {
+    for (int y = dim-1;  y >= 0; y-- ) {
+        for (int x = 0; x < dim; x++) {
             state tile {x,y};
             if (tile == position) {
                 cout << "[x]";
@@ -181,6 +181,10 @@ bool isOnRightEdge(state state, int dim) {
     return (state[0] == dim-1);
 }
 
+bool isOnAnyEdge(state state, int dim) {
+    return (isOnRightEdge(state, dim) || isOnLowerEdge(state) || isOnLeftEdge(state) || isOnUpperEdge(state, dim));
+}
+
 state getTileBelow(state fromState) {
     state tileBelow = {fromState[0], fromState[1] -1};
     return tileBelow;
@@ -219,6 +223,7 @@ action flipCounterClockwize(action moveDirection) {
             cout << "Something went wrong!" << endl;
             break;
     }
+    return moveDirection;
 }
 
 action flipClockwize(action moveDirection) {
@@ -238,7 +243,6 @@ action flipClockwize(action moveDirection) {
         default:
             cout << "Something went wrong!" << endl;
             break;
-
     }
-    
+    return moveDirection;
 }

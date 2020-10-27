@@ -6,14 +6,14 @@ MDP::MDP(){
 
 MDP::MDP(stateSpace S, transitionMap T, actionSpace A, rewardMap R) : m_S(S), m_T(T), m_A(A), m_R(R)
 {
-
+    m_N = m_S.size();
 }
 
 MDP::~MDP(){
 
 }
 
-void MDP::setStateSpace(stateSpace S) { m_S = S;}
+void MDP::setStateSpace(stateSpace S) { m_S = S; m_N = m_S.size();}
 
 void MDP::setTransitionMap(transitionMap T) { m_T = T; }
 
@@ -61,8 +61,9 @@ void MDP::print() {
     this->printRewardMap();
 }
 
-stateSpace getStateSpace();
-transitionMap getTransitionMap();
-actionSpace getActionSpace();
-rewardMap getRewardMap();
+stateSpace MDP::getStateSpace() { return m_S; }
+transitionMap MDP::getTransitionMap() { return m_T; }
+actionSpace MDP::getActionSpace() { return m_A;}
+rewardMap MDP::getRewardMap() { return m_R;}
+int MDP::getSize() { return m_N; }
 

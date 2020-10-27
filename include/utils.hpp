@@ -19,7 +19,7 @@ transitionMap generateZeroTransitionMap(actionSpace A, stateSpace S);
 void fillIncompleteTransitionMap(transitionMap &T, actionSpace A, stateSpace S);
 // Todo: Add function to verify axioms of probability for transition maps
 
-void printGridWolrd(int dim, state position);
+void printGridWorld(int dim, state position);
 void printRewardMap(rewardMap rewardMap, int dim);
 
 bool isOnUpperEdge(state state, int dim);
@@ -33,5 +33,5 @@ state getTileAbove(state fromState);
 state getTileToLeft(state fromState);
 state getTileToRight(state fromState);
 
-action flipClockWize(action moveDirection);
+action flipClockwize(action moveDirection);
 action flipCounterClockwize(action moveDirection);
