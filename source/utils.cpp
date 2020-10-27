@@ -60,6 +60,7 @@ void displayValueMap(valueMap V, int dim ) {
 
 
 //! Generates a default transition map where the probability of any transition is zero
+//! Todo: Consider moving this to MDP class
 transitionMap generateZeroTransitionMap(actionSpace A, stateSpace S) {
     transitionMap zeroTransitionMap;
     int count = 0;
