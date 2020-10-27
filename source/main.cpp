@@ -14,7 +14,7 @@ int main(){
     myMDP.setStateSpace(myStateSpace);
 
     // Create and set reward map, i.e. immediate rewards associated with states
-    rewardMap myRewardMap = generateRandomRewardMap(myStateSpace, -5, 10);
+    rewardMap myRewardMap = generateRandomRewardMap(myStateSpace, -10, 10);
     myMDP.setRewardMap(myRewardMap);
 
     // Create and set actions for the agent
@@ -30,7 +30,7 @@ int main(){
     myAgent.setMDP(myMDP);
 
     // Do Value-iteration
-    valueMap myValueMap = valueIteration(myMDP, 0.1, 1);
+    valueMap myValueMap = valueIteration(myMDP, 0.01, 1);
 
     cout << "Value map: " << endl;
     displayValueMap(myValueMap, 4);
