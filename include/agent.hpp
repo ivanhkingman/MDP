@@ -1,5 +1,10 @@
+#pragma once
+
 #include <vector>
+
 #include "utils.hpp"
+#include "mdp.hpp"
+#include "algorithms.hpp"
 
 using namespace std;
 
@@ -14,7 +19,7 @@ public:
     void attemptMove(action moveDirection);
     void executeMove(action moveDirection);
     void collectReward();
-    void printPosition();
+    void displayPosition();
     state getPosition();
     
     void setMDP(MDP mdp);

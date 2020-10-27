@@ -79,9 +79,9 @@ void Agent::collectReward() {
     m_totalReward += reward;
 }
 
-void Agent::printPosition() {
+void Agent::displayPosition() {
     int dim = sqrt(m_mdp.getSize());
-    printGridWorld(dim, m_state);
+    displayGridWorld(dim, m_state);
     cout << "Agent position: [" << m_state[0] << ", " << m_state[1] << endl; 
 }
 

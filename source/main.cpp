@@ -1,5 +1,6 @@
 #include <iostream>
 #include "agent.hpp"
+#include "algorithms.hpp"
 
 using namespace std;
 
@@ -13,7 +14,7 @@ int main(){
     myMDP.setStateSpace(myStateSpace);
 
     // Create and set reward map, i.e. immediate rewards associated with states
-    rewardMap myRewardMap = generateRandomRewardMap(myStateSpace, -100, 100);
+    rewardMap myRewardMap = generateRandomRewardMap(myStateSpace, -5, 10);
     myMDP.setRewardMap(myRewardMap);
 
     // Create and set actions for the agent
@@ -27,8 +28,17 @@ int main(){
     // Create an agent
     Agent myAgent;
     myAgent.setMDP(myMDP);
-    myAgent.printPosition();
 
+    // Do Value-iteration
+    valueMap myValueMap = valueIteration(myMDP, 0.1, 1);
+
+    cout << "Value map: " << endl;
+    displayValueMap(myValueMap, 4);
+    cout << endl;
+    cout << "Reward map: " << endl;
+    displayRewardMap(myMDP.getRewardMap(), 4);
+ 
+    /*
     while(1) {
         string userInput;
         cin >> userInput;
@@ -55,8 +65,9 @@ int main(){
         if (userInput == "e") {
             break;
         }
+     
     }
-    
+       */
     
 
     return 0;

@@ -15,7 +15,7 @@ stateSpace create2DGridWorld(int size) {
     return gridWorld;  
 }
 
-void printGridWorld(int dim, state position) {
+void displayGridWorld(int dim, state position) {
     for (int y = dim-1;  y >= 0; y-- ) {
         for (int x = 0; x < dim; x++) {
             state tile {x,y};
@@ -38,11 +38,21 @@ rewardMap generateRandomRewardMap(stateSpace gridWorld, int low, int high) {
     return rewardMap;
 }
 
-void printRewardMap(map<vector<int>, int> rewardMap, int dim) {
-    for (int x = 0;  x < dim; x++ ) {
-        for (int y = 0; y < dim; y++) {
+void displayRewardMap(map<vector<int>, int> R, int dim) {
+    for (int y = dim-1;  y >= 0; y-- ) {
+        for (int x = 0; x < dim; x++) {
             vector<int> tile {x,y};
-            cout << "[" << rewardMap[tile] << "]";
+            cout << "[" << R[tile] << "]";
+        }
+        cout << endl;
+    }
+}
+
+void displayValueMap(valueMap V, int dim ) {
+    for (int y = dim-1;  y >= 0; y-- ) {
+        for (int x = 0; x < dim; x++) {
+            vector<int> tile {x,y};
+            cout << "[" << V[tile] << "]";
         }
         cout << endl;
     }
@@ -82,22 +92,18 @@ transitionMap generateGridWorldTransitionMap(int dim, actionSpace A, stateSpace 
         state tileToRight = getTileToRight(leavingState);
         state tileToLeft = getTileToLeft(leavingState);
 
-        cout << "State in question: [" << leavingState[0] << ", " << leavingState[1] << "]" << endl;
+        
 
         if (isOnUpperEdge(leavingState, dim)) {
-            cout << '\t' << "State: [" << leavingState[0] << ", " << leavingState[1] << "] is on upper edge." << endl;
             tileAbove = leavingState; // So that agent cannot leave grid world
         }
         if (isOnLowerEdge(leavingState)) {
-            cout << '\t' << "State: [" << leavingState[0] << ", " << leavingState[1] << "] is on lower edge."<< endl;
             tileBelow = leavingState; // ="=
         }
         if (isOnRightEdge(leavingState, dim)) {
-            cout << '\t' << "State: [" << leavingState[0] << ", " << leavingState[1] << "] is on right edge."<< endl;
             tileToRight = leavingState; // ="=
         }
         if (isOnLeftEdge(leavingState)) {
-            cout << '\t' << "State: [" << leavingState[0] << ", " << leavingState[1] << "] is on left edge."<< endl;
             tileToLeft = leavingState; // ="=
         }
         
@@ -106,11 +112,6 @@ transitionMap generateGridWorldTransitionMap(int dim, actionSpace A, stateSpace 
         Transition goingBelowWithDown(leavingState, tileBelow, DOWN);
         Transition goingLeftWithDown(leavingState, tileToLeft, DOWN);
         Transition goingRightWithDown(leavingState, tileToRight, DOWN);
-
-        cout <<'\t' << "Tile below: [" << tileBelow[0] << ", " << tileBelow[1] << "]" << endl;
-        cout <<'\t' << "Tile above: [" << tileAbove[0] << ", " << tileAbove[1] << "]" << endl;
-        cout <<'\t' << "Tile to the left: [" << tileToLeft[0] << ", " << tileToLeft[1] << "]" << endl;
-        cout <<'\t' << "Tile to right: [" << tileToRight[0] << ", " << tileToRight[1] << "]" << endl;
 
         gridWorldTransitionMap.insert(pair<Transition, probability>(goingBelowWithDown, SUCCESS));
         gridWorldTransitionMap.insert(pair<Transition, probability>(goingLeftWithDown, FAIL/2));
@@ -142,7 +143,7 @@ transitionMap generateGridWorldTransitionMap(int dim, actionSpace A, stateSpace 
 
     }
 
-    //fillIncompleteTransitionMap(gridWorldTransitionMap, A, S);
+    fillIncompleteTransitionMap(gridWorldTransitionMap, A, S);
     return gridWorldTransitionMap;
 
 }
@@ -160,7 +161,6 @@ void fillIncompleteTransitionMap(transitionMap &T, actionSpace A, stateSpace S) 
             }
         }
     }
-    cout << count;
 }
 
 

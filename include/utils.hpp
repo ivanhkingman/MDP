@@ -1,3 +1,5 @@
+#pragma once
+
 using namespace std;
 
 #include <set>
@@ -19,8 +21,9 @@ transitionMap generateZeroTransitionMap(actionSpace A, stateSpace S);
 void fillIncompleteTransitionMap(transitionMap &T, actionSpace A, stateSpace S);
 // Todo: Add function to verify axioms of probability for transition maps
 
-void printGridWorld(int dim, state position);
-void printRewardMap(rewardMap rewardMap, int dim);
+void displayGridWorld(int dim, state position);
+void displayRewardMap(rewardMap R, int dim);
+void displayValueMap(valueMap V, int dim);
 
 bool isOnUpperEdge(state state, int dim);
 bool isOnLeftEdge(state state);

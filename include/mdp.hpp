@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <vector>
 #include <map>
@@ -15,6 +17,7 @@ using stateSpace = set<state>;
 using transitionMap = map<Transition, probability>;
 using actionSpace = set<action>;
 using rewardMap = map<state, reward>;
+using valueMap = map<state, double>;
 
 class MDP {
 public:
