@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <random>
+#include <ctime>
 
 #include "utils.hpp"
 #include "mdp.hpp"
@@ -16,16 +18,19 @@ public:
     Agent();
     ~Agent();
 
-    void attemptMove(action moveDirection);
-    void executeMove(action moveDirection);
+    void attemptMove(action moveDirection, double SUCCESS, int dim);
+    void executeMove(action moveDirection, int dim);
     void collectReward();
     void displayPosition();
     state getPosition();
+    double getReward();
     
     void setMDP(MDP mdp);
+    void reset();
+
 
 private:
     state m_state;
     MDP m_mdp;
-    int m_totalReward;
+    double m_totalReward;
 };

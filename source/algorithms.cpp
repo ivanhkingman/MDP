@@ -13,7 +13,8 @@ valueMap valueIteration(MDP mdp, const double threshold, double gamma) {
         delta = 0;
         for (auto stateIt = S.begin(); stateIt != S.end(); stateIt++) {
             state state = *stateIt;
-            V.at(state) = R.at(state) + gamma * greatestExpectedValueSum(state, VPrev, A, T, S);
+            V.at(state) = greatestExpectedValueSum(state, A, T, S, R, V, gamma);
+            
             if ( abs(V.at(state) - VPrev.at(state)) > delta) {
                 delta = abs(V.at(state)) - VPrev.at(state);
             }
@@ -32,7 +33,7 @@ valueMap zeroInitializeValueMap(stateSpace S) {
     return V;
 }
 
-double greatestExpectedValueSum(state fromState, valueMap VPrev, actionSpace A, transitionMap T, stateSpace S) {
+double greatestExpectedValueSum(state fromState, actionSpace A, transitionMap T, stateSpace S, rewardMap R,valueMap V, double gamma) {
     double greatestExpectedValueSum = -DBL_MAX;
     for (auto actionIt = A.begin(); actionIt != A.end(); actionIt++) {
         action withAction = *actionIt;
@@ -40,7 +41,7 @@ double greatestExpectedValueSum(state fromState, valueMap VPrev, actionSpace A, 
         for (auto toStateIt = S.begin(); toStateIt != S.end(); toStateIt++) {
             state toState = *toStateIt;
             Transition transition(fromState, toState, withAction);
-            double expectedValue = T.at(transition)*VPrev.at(toState);
+            double expectedValue = T.at(transition)*(R.at(fromState) + gamma*V.at(toState));
             expectedValueSum += expectedValue;
         }
     if (expectedValueSum > greatestExpectedValueSum) {greatestExpectedValueSum = expectedValueSum;}
@@ -54,6 +55,39 @@ void printValueMap(valueMap V) {
     }
 }
 
-policy derivePolicyFromValueMap(valueMap V, MDP mdp) {
-    // 
+policy derivePolicyFromValueMap(valueMap V, MDP mdp, double gamma) {
+    policy derivedPolicy;
+    stateSpace S = mdp.getStateSpace();
+    actionSpace A = mdp.getActionSpace();
+    transitionMap T = mdp.getTransitionMap();
+    rewardMap R = mdp.getRewardMap();
+    for (auto fromStateIt = S.begin(); fromStateIt != S.end(); fromStateIt++) {
+        state fromState = *fromStateIt;
+        action bestAction = 0; // Arbitrarily initialized to the first action
+        double greatestExpectedValue = -DBL_MAX;
+        for (auto withActionIt = A.begin(); withActionIt != A.end(); withActionIt++) {
+            action withAction = *withActionIt;
+            double expectedValueSum = 0; //
+            for (auto toStateIt = S.begin(); toStateIt != S.end(); toStateIt++) {
+                state toState = *toStateIt;
+                Transition transition(fromState, toState, withAction);
+                double expectedValue = T.at(transition)*(R.at(fromState) + gamma*V.at(toState));
+                expectedValueSum = expectedValueSum + expectedValue;
+            }
+            if (expectedValueSum > greatestExpectedValue) {
+                greatestExpectedValue = expectedValueSum; 
+                bestAction = withAction; 
+            }          
+        }
+        derivedPolicy[fromState] = bestAction;  
+    }
+    return derivedPolicy;
+}
+
+void printPolicy(policy Pi) {
+    for (auto mapIt = Pi.begin(); mapIt != Pi.end(); mapIt++) {
+        state st = mapIt->first;
+        action a = mapIt->second;
+        cout << "Policy in state [" << st[0] << ", " << st[1] << "] is: " << a << endl;
+    }
 }

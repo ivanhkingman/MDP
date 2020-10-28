@@ -20,8 +20,11 @@ valueMap zeroInitializeValueMap(stateSpace S);
 double maximizeValueOverAction(valueMap V, MDP mdp, state fromState, action withAction, double gamma);
 
 valueMap valueIteration(MDP mdp, const double threshold, double gamma);
-double greatestExpectedValueSum(state fromState, valueMap VPrev, actionSpace A, transitionMap T, stateSpace S);
+double greatestExpectedValueSum(state fromState, actionSpace A, transitionMap T, stateSpace S, rewardMap R, valueMap V, double gamma);
+
+policy derivePolicyFromValueMap(valueMap V, MDP mdp, double gamma);
 
 void printValueMap(valueMap V);
+void printPolicy(policy Pi);
 
 

@@ -7,8 +7,10 @@ using namespace std;
 #include <vector>
 #include <iostream>
 #include <random>
+#include <ctime>
 
 #include "mdp.hpp"
+#include "algorithms.hpp"
 
 
 enum actions {UP, DOWN, LEFT, RIGHT};
@@ -16,7 +18,7 @@ enum actions {UP, DOWN, LEFT, RIGHT};
 
 stateSpace create2DGridWorld(int size);
 rewardMap generateRandomRewardMap(stateSpace gridWorld, int low, int high);
-transitionMap generateGridWorldTransitionMap(int dim, actionSpace A, stateSpace S);
+transitionMap generateGridWorldTransitionMap(int dim, actionSpace A, stateSpace S, double SUCCESS);
 transitionMap generateZeroTransitionMap(actionSpace A, stateSpace S);
 void fillIncompleteTransitionMap(transitionMap &T, actionSpace A, stateSpace S);
 // Todo: Add function to verify axioms of probability for transition maps
@@ -24,6 +26,7 @@ void fillIncompleteTransitionMap(transitionMap &T, actionSpace A, stateSpace S);
 void displayGridWorld(int dim, state position);
 void displayRewardMap(rewardMap R, int dim);
 void displayValueMap(valueMap V, int dim);
+void displayPolicy(policy Pi, int dim);
 
 bool isOnUpperEdge(state state, int dim);
 bool isOnLeftEdge(state state);

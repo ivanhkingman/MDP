@@ -31,6 +31,7 @@ void displayGridWorld(int dim, state position) {
 
 rewardMap generateRandomRewardMap(stateSpace gridWorld, int low, int high) {
     rewardMap rewardMap;
+    srand((unsigned int)time(NULL));
     for (auto it = gridWorld.begin(); it != gridWorld.end(); it++) {
         int randomReward = rand() % high + low;
         rewardMap.insert(pair<state, int>(*it, randomReward));
@@ -58,6 +59,24 @@ void displayValueMap(valueMap V, int dim ) {
     }
 }
 
+void displayPolicy(policy Pi, int dim) {
+    for (int y = dim-1;  y >= 0; y-- ) {
+        for (int x = 0; x < dim; x++) {
+            state tile {x,y};
+            switch (Pi.at(tile)) {
+                case UP:
+                    cout << "[^]"; break;
+                case DOWN:
+                    cout << "[v]"; break;
+                case RIGHT:
+                    cout << "[>]"; break;
+                case LEFT:
+                    cout << "[<]"; break;
+            }
+        }
+        cout << endl;
+    }
+}
 
 //! Generates a default transition map where the probability of any transition is zero
 //! Todo: Consider moving this to MDP class
@@ -81,10 +100,9 @@ transitionMap generateZeroTransitionMap(actionSpace A, stateSpace S) {
 //!     The agent has 80% chance of successfully going in the direction it chose
 //!     The other 20% are equally divided between going left or right leaving the chosen direction
 //!     If the agent tries to leave the grid world, it will remain in the same tile
-transitionMap generateGridWorldTransitionMap(int dim, actionSpace A, stateSpace S) {
+transitionMap generateGridWorldTransitionMap(int dim, actionSpace A, stateSpace S, probability SUCCESS) {
     transitionMap gridWorldTransitionMap;
-    const probability SUCCESS = 0.8;
-    const probability FAIL = 0.2;
+    probability FAIL = 1 - SUCCESS;
     for (auto leavingStateIt = S.begin(); leavingStateIt != S.end(); leavingStateIt++) {
         
         state leavingState = *leavingStateIt;
@@ -92,8 +110,6 @@ transitionMap generateGridWorldTransitionMap(int dim, actionSpace A, stateSpace 
         state tileBelow = getTileBelow(leavingState);
         state tileToRight = getTileToRight(leavingState);
         state tileToLeft = getTileToLeft(leavingState);
-
-        
 
         if (isOnUpperEdge(leavingState, dim)) {
             tileAbove = leavingState; // So that agent cannot leave grid world
