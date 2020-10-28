@@ -35,6 +35,7 @@ valueMap zeroInitializeValueMap(stateSpace S) {
 
 double greatestExpectedValueSum(state fromState, actionSpace A, transitionMap T, stateSpace S, rewardMap R,valueMap V, double gamma) {
     double greatestExpectedValueSum = -DBL_MAX;
+    // Todo: Make this into reusable method
     for (auto actionIt = A.begin(); actionIt != A.end(); actionIt++) {
         action withAction = *actionIt;
         double expectedValueSum = 0;
@@ -55,6 +56,7 @@ void printValueMap(valueMap V) {
     }
 }
 
+// Todo: Dont extract the members of MDP before passing them to argMaxExpectedValue, just send the whole MDP
 policy derivePolicyFromValueMap(valueMap V, MDP mdp, double gamma) {
     policy derivedPolicy;
     stateSpace S = mdp.getStateSpace();
@@ -63,9 +65,17 @@ policy derivePolicyFromValueMap(valueMap V, MDP mdp, double gamma) {
     rewardMap R = mdp.getRewardMap();
     for (auto fromStateIt = S.begin(); fromStateIt != S.end(); fromStateIt++) {
         state fromState = *fromStateIt;
-        action bestAction = 0; // Arbitrarily initialized to the first action
-        double greatestExpectedValue = -DBL_MAX;
-        for (auto withActionIt = A.begin(); withActionIt != A.end(); withActionIt++) {
+        action bestAction = argMaxExpectedValue(A, S, fromState, T, R, V, gamma);
+        derivedPolicy[fromState] = bestAction;  
+    }
+    return derivedPolicy;
+}
+
+// Todo: Dont extract the members of MDP before passing them to argMaxExpectedValue, just send the whole MDP
+action argMaxExpectedValue(actionSpace A, stateSpace S, state fromState, transitionMap T, rewardMap R, valueMap V, double gamma) {
+    double greatestExpectedValue = -DBL_MAX;
+    action bestAction;
+    for (auto withActionIt = A.begin(); withActionIt != A.end(); withActionIt++) {
             action withAction = *withActionIt;
             double expectedValueSum = 0; //
             for (auto toStateIt = S.begin(); toStateIt != S.end(); toStateIt++) {
@@ -79,9 +89,7 @@ policy derivePolicyFromValueMap(valueMap V, MDP mdp, double gamma) {
                 bestAction = withAction; 
             }          
         }
-        derivedPolicy[fromState] = bestAction;  
-    }
-    return derivedPolicy;
+    return bestAction;
 }
 
 void printPolicy(policy Pi) {
@@ -92,21 +100,23 @@ void printPolicy(policy Pi) {
     }
 }
 
-policy policyIteration(MDP mdp) {
+policy policyIteration(MDP mdp, double gamma, double threshold) {
     stateSpace S = mdp.getStateSpace();
+    actionSpace A = mdp.getActionSpace();
+    rewardMap R = mdp.getRewardMap();
+    transitionMap T = mdp.getTransitionMap();
     policy Pi = zeroInitializePolicy(S);
+    policy NextPi = Pi;
 
     do {
-        policy NextPi = Pi;
-        valueMap V = policyEvaluation(mdp, Pi);
+        NextPi = Pi;
+        valueMap V = policyEvaluation(mdp, Pi, threshold, gamma);
         for (auto fromStateIt = S.begin(); fromStateIt != S.end(); fromStateIt++) {
             state fromState = *fromStateIt;
-            action bestAction
+            action bestAction = argMaxExpectedValue(A, S, fromState, T, R, V, gamma);
             Pi.insert(pair<state, action>(fromState, bestAction));
         }
-
-    } while (1);
-
+    } while (NextPi != Pi);
     return Pi;
 }
 
@@ -118,6 +128,36 @@ policy zeroInitializePolicy(const stateSpace S) {
     return Pi;
 }
 
-valueMap policyEvaluation(MDP mdp, policy Pi) {
-
+valueMap policyEvaluation(MDP mdp, policy Pi, double threshold, double gamma) {
+    stateSpace S = mdp.getStateSpace();
+    actionSpace A = mdp.getActionSpace();
+    transitionMap T = mdp.getTransitionMap();
+    rewardMap R = mdp.getRewardMap();
+    valueMap V = zeroInitializeValueMap(S);
+    double delta = 0;
+    int iterations = 0;
+    do {
+        delta = 0;
+        for (auto fromStateIt = S.begin(); fromStateIt != S.end(); fromStateIt++) {
+            state fromState = *fromStateIt;
+            double v = V.at(fromState);
+            for (auto actionIt = A.begin(); actionIt != A.end(); actionIt++) {
+                action withAction = *actionIt;
+                double expectedValueSum = 0;
+                for (auto toStateIt = S.begin(); toStateIt != S.end(); toStateIt++) {
+                    state toState = *toStateIt;
+                    Transition transition(fromState, toState, withAction);
+                    double expectedValue = T.at(transition)*(R.at(fromState) + gamma*V.at(toState));
+                    expectedValueSum += expectedValue;
+                    cout << "Expected value sum: " << expectedValueSum << endl;
+                }
+                V.at(fromState) = expectedValueSum;
+                cout << "Change in value: " << abs(v - V.at(fromState) > delta) << endl;
+            }
+            if (abs(v - V.at(fromState) > delta)) {delta = abs(v - V.at(fromState)); }
+        }
+        iterations++; 
+    } while (delta>threshold );
+    cout << "Terminated after " << iterations << " iterations." << endl;
+    return V;
 }

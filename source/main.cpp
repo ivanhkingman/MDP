@@ -44,5 +44,20 @@ int main(){
     // Let computer play the game using valueiteration
     // letAlgorithmPlayGridWorld(myAgent, myMDP, dim, moves, 0.8, successRate);
 
+    // Let computer play the game using policy iteration
+    policy agentPolicy = policyIteration(myMDP, 0.8, 0.001);
+    for (int turn = 0; turn < moves; turn++) {
+        action nextMove = agentPolicy.at(myAgent.getPosition());
+        myAgent.attemptMove(nextMove, successRate, dim);
+        myAgent.collectReward();
+    }
+
+    double agentReward = myAgent.getReward();
+    cout << "Agent accumulated reward: " << myAgent.getReward() << endl;
+    cout << "Agent used policy: " << endl;
+    displayPolicy(agentPolicy, dim);
+    myAgent.reset();
+
+
     return 0;
 }

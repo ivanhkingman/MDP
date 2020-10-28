@@ -26,12 +26,14 @@ policy derivePolicyFromValueMap(valueMap V, MDP mdp, double gamma);
 void printValueMap(valueMap V);
 void printPolicy(policy Pi);
 
+action argMaxExpectedValue(actionSpace A, stateSpace S, state fromState, transitionMap T, rewardMap R, valueMap V, double gamma);
+
 //---
 
 //! Policy iteration
-policy policyIteration(MDP mpd);
+policy policyIteration(MDP mpd, double gamma, double threshold);
 policy zeroInitializePolicy(const stateSpace S);
-valueMap policyEvaluation(MDP mdp, policy Pi);
+valueMap policyEvaluation(MDP mdp, policy Pi, double threshold, double gamma);
 
 //! Q-learning
 
