@@ -91,3 +91,33 @@ void printPolicy(policy Pi) {
         cout << "Policy in state [" << st[0] << ", " << st[1] << "] is: " << a << endl;
     }
 }
+
+policy policyIteration(MDP mdp) {
+    stateSpace S = mdp.getStateSpace();
+    policy Pi = zeroInitializePolicy(S);
+
+    do {
+        policy NextPi = Pi;
+        valueMap V = policyEvaluation(mdp, Pi);
+        for (auto fromStateIt = S.begin(); fromStateIt != S.end(); fromStateIt++) {
+            state fromState = *fromStateIt;
+            action bestAction
+            Pi.insert(pair<state, action>(fromState, bestAction));
+        }
+
+    } while (1);
+
+    return Pi;
+}
+
+policy zeroInitializePolicy(const stateSpace S) {
+    policy Pi;
+    for (auto stateIt = S.begin(); stateIt != S.end(); stateIt++) {
+        Pi.insert(pair<state, action>(*stateIt, 0));
+    }
+    return Pi;
+}
+
+valueMap policyEvaluation(MDP mdp, policy Pi) {
+
+}
