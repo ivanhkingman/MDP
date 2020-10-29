@@ -194,7 +194,8 @@ stateActionValueMap Q_learning(stateSpace S, actionSpace A, state s0) {
                 // Therefore, agent is the one who observes state, then informs algorithm
 
             // conclusion: This algorithm needs to communicate with the agent
-                // need to work on agent class to make algorithm a member_variable of agent
+                // need to work on agent class to make algorithm a member variable of agent
+                // need to make environment a class...
 
         }
     }
