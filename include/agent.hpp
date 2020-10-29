@@ -4,9 +4,9 @@
 #include <random>
 #include <ctime>
 
-#include "utils.hpp"
+#include "environment.hpp"
 #include "mdp.hpp"
-#include "algorithms.hpp"
+#include "algorithm.hpp"
 
 using namespace std;
 
@@ -18,19 +18,34 @@ public:
     Agent();
     ~Agent();
 
-    void attemptMove(action moveDirection, double SUCCESS, int dim);
-    void executeMove(action moveDirection, int dim);
+    void executeAction(action action);
     void collectReward();
-    void displayPosition();
-    state getPosition();
+    void observeState();
+    void printStateEstimate();
+    void invokeAlgorithm();
+
+    state getStateEstimate();
     double getReward();
+    Environment getEnvironment();
+    policy getPolicy();
+
+    void followPolicy();
     
+    void deployInEnvironment(Environment environment);
+    void attatchAlgorithm(Algorithm &algorithm);
     void setMDP(MDP mdp);
     void reset();
 
-
 private:
-    state m_state;
+    state m_stateEstimate;
     MDP m_mdp;
+    policy m_Pi;
+    valueMap m_V;
+    stateActionValueMap m_Q;
+    int m_n;
+
+    Environment m_environment;
+    Algorithm m_algorithm;
+
     double m_totalReward;
 };

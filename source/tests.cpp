@@ -1,68 +1,57 @@
-#include <iostream>
-
 #include "tests.hpp"
 
-void letUserPlayGridWorld(Agent myAgent, MDP myMDP, int dim, int moves, double successRate) {
-    myAgent.displayPosition();
-    displayRewardMap(myMDP.getRewardMap(), dim);
-    int playerTurns = 0;
-    while(playerTurns < moves) {
+#include <iostream>
+
+void letUserPlayGridWorld(Agent agent, MDP myMDP, int moves, GridWorld gridWorld) {
+    gridWorld.displayRewardMap();
+    gridWorld.displayGridWorld();
+    int turnCounter = 0;
+    while(turnCounter < moves) {
         string userInput;
         cin >> userInput;
         if (userInput == "w") {
-            playerTurns++;
-            userInput = "_";
-            myAgent.attemptMove(UP, successRate, dim);
-            myAgent.displayPosition();
-            displayRewardMap(myMDP.getRewardMap(), dim);
-            myAgent.collectReward();
+            agent.executeAction(UP);
         }
         if (userInput == "s") {
-            playerTurns++;
-            userInput = "_";
-            myAgent.attemptMove(DOWN, successRate, dim);
-            myAgent.displayPosition();
-            displayRewardMap(myMDP.getRewardMap(), dim);
-            myAgent.collectReward();
+            agent.executeAction(DOWN);
         }
         if (userInput == "a") {
-            playerTurns++;
-            userInput = "_";
-            myAgent.attemptMove(LEFT, successRate, dim);
-            myAgent.displayPosition();
-            displayRewardMap(myMDP.getRewardMap(), dim);
-            myAgent.collectReward();
+            agent.executeAction(LEFT);
         }
         if (userInput == "d") {
-            playerTurns++;
+            turnCounter++;
             userInput = "_";
-            myAgent.attemptMove(RIGHT, successRate, dim);
-            myAgent.displayPosition();
-            displayRewardMap(myMDP.getRewardMap(), dim);
-            myAgent.collectReward();
+            agent.executeAction(RIGHT);
         }
         if (userInput == "e") {
             break;
         }
+        processTurn(turnCounter, userInput, agent, gridWorld);
     }
-    double agentReward = myAgent.getReward();
-    cout << "You accumulated reward: " << myAgent.getReward() << endl;
+    double agentReward = agent.getReward();
+    cout << "You accumulated reward: " << agent.getReward() << endl;
 }
 
-void letAlgorithmPlayGridWorld(Agent myAgent, MDP myMDP, int dim, int moves, double gamma, double successRate) {
-    valueMap agentValueMap = valueIteration(myMDP, 0.01, gamma);
-    policy agentPolicy = derivePolicyFromValueMap(agentValueMap, myMDP, gamma);
-
+void letAlgorithmPlayGridWorld(Agent agent, MDP myMDP, int moves, double gamma) {
+    agent.runAlgorithm();
     for (int turn = 0; turn < moves; turn++) {
-        action nextMove = agentPolicy.at(myAgent.getPosition());
-        myAgent.attemptMove(nextMove, successRate, dim);
-        myAgent.collectReward();
+        action nextMove = agent.getPolicy().at(agent.getStateEstimate());
+        agent.executeAction(nextMove);
+        agent.collectReward();
     }
 
-    double agentReward = myAgent.getReward();
-    cout << "Value iteration algorithm accumulated reward: " << myAgent.getReward() << endl;
+    double agentReward = agent.getReward();
+    cout << "Value iteration algorithm accumulated reward: " << agent.getReward() << endl;
     cout << "Agent used policy: " << endl;
-    displayPolicy(agentPolicy, dim);
-    myAgent.reset();
+    displayPolicyGrid(agent.getPolicy());
+    agent.reset();
 
+}
+
+void processTurn(int &turnCounter, string userInput, Agent agent, GridWorld gridWorld) {
+    turnCounter++;
+    userInput = "_";
+    gridWorld.displayGridWorld();
+    gridWorld.displayRewardMap();
+    agent.collectReward();
 }

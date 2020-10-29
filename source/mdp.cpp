@@ -67,3 +67,19 @@ actionSpace MDP::getActionSpace() { return m_A;}
 rewardMap MDP::getRewardMap() { return m_R;}
 int MDP::getSize() { return m_N; }
 
+transitionMap generateZeroTransitionMap(actionSpace A, stateSpace S) {
+    transitionMap zeroTransitionMap;
+    int count = 0;
+    for (auto leavingState = S.begin(); leavingState != S.end(); leavingState++) {
+        for (auto enteringState = S.begin(); enteringState != S.end(); enteringState++) {
+            for (auto withAction = A.begin(); withAction != A.end(); withAction++) {
+                Transition transition(*leavingState, *enteringState, *withAction);
+                zeroTransitionMap.insert(pair<Transition, probability>(transition, 0));
+                count++;
+            }
+        }
+    }
+    cout << count << endl;
+    return zeroTransitionMap;
+}
+

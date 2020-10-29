@@ -19,6 +19,7 @@ using actionSpace = set<action>;
 using rewardMap = map<state, reward>;
 using valueMap = map<state, double>;
 
+
 class MDP {
 public:
     MDP();
@@ -51,3 +52,5 @@ private:
     int m_N;
     
 };
+
+transitionMap generateZeroTransitionMap(actionSpace A, stateSpace S);

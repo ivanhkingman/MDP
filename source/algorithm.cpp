@@ -1,36 +1,12 @@
-#include "algorithms.hpp"
+#include "algorithm.hpp"
+#include "valueiteration.hpp"
 
-valueMap valueIteration(MDP mdp, const double threshold, double gamma) {
-    stateSpace S = mdp.getStateSpace();
-    transitionMap T = mdp.getTransitionMap();
-    actionSpace A = mdp.getActionSpace();
-    rewardMap R = mdp.getRewardMap();
-    valueMap V = zeroInitializeValueMap(S);
-    double delta = DBL_MAX;
-    int numberOfIterations = 0;
-    while ( delta > (threshold*(1-gamma)/gamma) ) {
-        valueMap VPrev = V;
-        delta = 0;
-        for (auto stateIt = S.begin(); stateIt != S.end(); stateIt++) {
-            state state = *stateIt;
-            V.at(state) = greatestExpectedValueSum(state, A, T, S, R, V, gamma);
-            
-            if ( abs(V.at(state) - VPrev.at(state)) > delta) {
-                delta = abs(V.at(state)) - VPrev.at(state);
-            }
-        }
-        numberOfIterations++;
-    }
-    cout << "Terminated after: " <<  numberOfIterations << " iterations" << endl;
-    return V;
+Algorithm::Algorithm() {
+
 }
 
-valueMap zeroInitializeValueMap(stateSpace S) {
-    valueMap V;
-    for (auto stateIt = S.begin(); stateIt != S.end(); stateIt++) {
-        V.insert(pair<state,double>(*stateIt, 0));
-    }
-    return V;
+Algorithm::~Algorithm() {
+    
 }
 
 double greatestExpectedValueSum(state fromState, actionSpace A, transitionMap T, stateSpace S, rewardMap R,valueMap V, double gamma) {
@@ -50,11 +26,7 @@ double greatestExpectedValueSum(state fromState, actionSpace A, transitionMap T,
     return greatestExpectedValueSum;
 }
 
-void printValueMap(valueMap V) {
-    for (auto mapIterator = V.begin(); mapIterator != V.end(); mapIterator++) {
-        cout << "State: [" << mapIterator->first[0] << ", " << mapIterator->first[1] << "] has value " << mapIterator->second << endl;
-    }
-}
+
 
 // Todo: Dont extract the members of MDP before passing them to argMaxExpectedValue, just send the whole MDP
 policy derivePolicyFromValueMap(valueMap V, MDP mdp, double gamma) {
@@ -202,8 +174,6 @@ stateActionValueMap Q_learning(stateSpace S, actionSpace A, state s0) {
 
     return Q;
 }
-
-
 
 stateActionValueMap zeroInitializeQ(stateSpace S, actionSpace A) {
     stateActionValueMap Q;
