@@ -107,16 +107,19 @@ policy policyIteration(MDP mdp, double gamma, double threshold) {
     transitionMap T = mdp.getTransitionMap();
     policy Pi = zeroInitializePolicy(S);
     policy NextPi = Pi;
-
+    int policyEvaluationIterations = 0;
     do {
         NextPi = Pi;
         valueMap V = policyEvaluation(mdp, Pi, threshold, gamma);
+        
         for (auto fromStateIt = S.begin(); fromStateIt != S.end(); fromStateIt++) {
             state fromState = *fromStateIt;
             action bestAction = argMaxExpectedValue(A, S, fromState, T, R, V, gamma);
-            Pi.insert(pair<state, action>(fromState, bestAction));
+            Pi.at(fromState) = bestAction;
         }
+        policyEvaluationIterations++;
     } while (NextPi != Pi);
+    // cout << "Policy iteration iterations: " << policyEvaluationIterations << endl;
     return Pi;
 }
 
@@ -141,23 +144,21 @@ valueMap policyEvaluation(MDP mdp, policy Pi, double threshold, double gamma) {
         for (auto fromStateIt = S.begin(); fromStateIt != S.end(); fromStateIt++) {
             state fromState = *fromStateIt;
             double v = V.at(fromState);
-            for (auto actionIt = A.begin(); actionIt != A.end(); actionIt++) {
-                action withAction = *actionIt;
-                double expectedValueSum = 0;
-                for (auto toStateIt = S.begin(); toStateIt != S.end(); toStateIt++) {
-                    state toState = *toStateIt;
-                    Transition transition(fromState, toState, withAction);
-                    double expectedValue = T.at(transition)*(R.at(fromState) + gamma*V.at(toState));
-                    expectedValueSum += expectedValue;
-                    cout << "Expected value sum: " << expectedValueSum << endl;
-                }
-                V.at(fromState) = expectedValueSum;
-                cout << "Change in value: " << abs(v - V.at(fromState) > delta) << endl;
+            action withAction = Pi.at(fromState);
+            double expectedValueSum = 0;
+            for (auto toStateIt = S.begin(); toStateIt != S.end(); toStateIt++) {
+                state toState = *toStateIt;
+                Transition transition(fromState, toState, withAction);
+                double expectedValue = T.at(transition)*(R.at(fromState) + gamma*V.at(toState));
+                expectedValueSum += expectedValue;
+                // cout << "Expected value sum: " << expectedValueSum << endl;
             }
-            if (abs(v - V.at(fromState) > delta)) {delta = abs(v - V.at(fromState)); }
-        }
+            V.at(fromState) = expectedValueSum;
+            // cout << "Change in value: " << abs(v - V.at(fromState) > delta) << endl;
+            if ((abs(v - V.at(fromState)) > delta)) {delta = abs(v - V.at(fromState)); }
+            }
         iterations++; 
     } while (delta>threshold );
-    cout << "Terminated after " << iterations << " iterations." << endl;
+    // cout << "Policy evaluation Terminated after " << iterations << " iterations." << endl;
     return V;
 }

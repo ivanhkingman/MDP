@@ -60,7 +60,7 @@ void letAlgorithmPlayGridWorld(Agent myAgent, MDP myMDP, int dim, int moves, dou
     }
 
     double agentReward = myAgent.getReward();
-    cout << "Agent accumulated reward: " << myAgent.getReward() << endl;
+    cout << "Value iteration algorithm accumulated reward: " << myAgent.getReward() << endl;
     cout << "Agent used policy: " << endl;
     displayPolicy(agentPolicy, dim);
     myAgent.reset();
