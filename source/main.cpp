@@ -38,7 +38,7 @@ int main(){
     Agent myAgent;
     myAgent.setMDP(myMDP);
 
-    // Let player play the game
+    // Let player play the game using human intelligence. How sad.
     // letUserPlayGridWorld(myAgent, myMDP, dim, moves, successRate);
 
     cout << "Playing on map: " << endl;
@@ -61,6 +61,8 @@ int main(){
     displayPolicy(agentPolicy, dim);
     myAgent.reset();
 
+    stateActionValueMap Q = zeroInitializeQ(myStateSpace, myActionSpace);
+    printStateActionValueMap(Q); cout << endl;
 
     return 0;
 }

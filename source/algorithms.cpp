@@ -162,3 +162,79 @@ valueMap policyEvaluation(MDP mdp, policy Pi, double threshold, double gamma) {
     // cout << "Policy evaluation Terminated after " << iterations << " iterations." << endl;
     return V;
 }
+
+stateActionValueMap Q_learning(stateSpace S, actionSpace A, state s0) {
+    stateActionValueMap Q = zeroInitializeQ(S, A);
+    int episodes;
+    
+    for (int e = 0; e < episodes; e++) {
+        state s = s0;
+        bool reachedGoalState = false;
+        while (!reachedGoalState) {
+            bool exploit = true;
+            if (exploit) {
+                double bestValue = -DBL_MAX;
+                action bestAction;
+                for (auto actionIt = A.begin(); actionIt != A.end(); actionIt++) {
+                    action a = *actionIt;
+                    stateActionPair stateAction(s0, a);
+                    double value = Q.at(stateAction);
+                    if (value > bestValue) {bestValue = value; bestAction = a;}
+                }
+            } else {
+                // find another action
+            }
+            // perform action (either best or random)
+                // how to perform action? pass message? invoke behavior in agent?
+                // should agent be passed as parameter to function -- hmm
+                // or return action, then run function again
+
+            // observe new state, collect reward
+                // I think algorithm and environment should be kept separate
+                // Therefore, agent is the one who observes state, then informs algorithm
+
+            // conclusion: This algorithm needs to communicate with the agent
+                // need to work on agent class to make algorithm a member_variable of agent
+
+        }
+    }
+
+    return Q;
+}
+
+
+
+stateActionValueMap zeroInitializeQ(stateSpace S, actionSpace A) {
+    stateActionValueMap Q;
+    for (auto fromStateIt = S.begin(); fromStateIt != S.end(); fromStateIt++) {
+        state fromState = *fromStateIt;
+        for (auto withActionIt = A.begin(); withActionIt != A.end(); withActionIt++) {
+            action withAction = *withActionIt;
+            stateActionPair stateAction(fromState, withAction);
+            Q[stateAction] = 0;
+        }
+    }
+
+    return Q;
+}
+
+void printStateActionValueMap(stateActionValueMap Q) {
+    for (auto mapIt = Q.begin(); mapIt != Q.end(); mapIt++) {
+        state state = mapIt->first.first;
+        action action = mapIt->first.second; 
+        cout << "State: " << "[ " << state[0] << ", " << state[1] << "],  action: " << action;
+        cout << " has value: " << mapIt->second << endl;
+    }
+}
+
+stateActionValueMap sarsa() {
+    stateActionValueMap Q;
+
+    return Q;
+}
+
+string stateToString(state state) {
+    string stateAsString;
+
+    return stateAsString;
+}
