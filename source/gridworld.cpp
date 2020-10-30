@@ -8,6 +8,7 @@ GridWorld::GridWorld() {
 GridWorld::GridWorld(const unsigned int DIMENSION, int minReward, int maxReward, probability successRate) 
 : m_dimension(DIMENSION), m_moveSuccessRate(successRate)
 {
+    cout << "Constructed grid world using paramterers. " << endl;
     m_A = {UP, DOWN, LEFT, RIGHT};
     stateSpace grid;
     for (int x = 0; x < m_dimension; x++) {
@@ -18,17 +19,18 @@ GridWorld::GridWorld(const unsigned int DIMENSION, int minReward, int maxReward,
     }
     m_S = grid;
     m_state = {0, 0};
-    void generateRandomRewardMap(int minReward, int maxReward);
-    void generateGridWorldTransitionMap();
+    generateRandomRewardMap(minReward, maxReward);
+    generateGridWorldTransitionMap();
 
 }
 
 void GridWorld::reactToAction(action move) {
+    // cout << "Gridworld reacting to action..." << endl;
     float p = m_moveSuccessRate;
     float not_p = 1-p;
     float diceRoll = static_cast <float> (rand())/ static_cast <float> (RAND_MAX);
     if (p > diceRoll) {
-        cout << "Move succeeded" << endl;
+        // cout << "Move succeeded" << endl;
         executeMove(move);
         return;
     }
@@ -67,22 +69,30 @@ void GridWorld::executeMove(action move) {
         case UP:
             cout << "Moving up" << endl;
             m_state = getTileAbove(m_state);
+            // cout << "State after switch: "; printState(m_state); cout << endl;
             break;
         case DOWN:
             cout << "Moving down" << endl;
             m_state = getTileBelow(m_state);
+            // cout << "State after switch: "; printState(m_state); cout << endl;
             break;
         case LEFT:
             cout << "Moving left" << endl;
             m_state = getTileToLeft(m_state);
+            // cout << "State after switch: "; printState(m_state); cout << endl;
             break;
         case RIGHT:
             cout << "Moving right" << endl;
             m_state = getTileToRight(m_state);
+            // cout << "State after switch: "; printState(m_state); cout << endl;
             break;
     }
+    
 }
 
+void GridWorld::reset() {
+    m_state = {0, 0};
+}
 
 //! The gridworld transition map is defined by the following rules:
 //!     The agent has fixed chance of successfully going in the direction it chose
@@ -193,21 +203,25 @@ bool GridWorld::isOnAnyEdge(state state) {
 
 state GridWorld::getTileBelow(state fromState) {
     state tileBelow = {fromState[0], fromState[1] -1};
+    // cout << "Tile below: "; printState(tileBelow); cout << endl;
     return tileBelow;
 }
 
 state GridWorld::getTileAbove(state fromState) {
     state tileAbove = {fromState[0], fromState[1] + 1};
+    // cout << "Tile above: "; printState(tileAbove); cout << endl;
     return tileAbove;
 }
 
 state GridWorld::getTileToLeft(state fromState) {
     state tileToLeft = {fromState[0] - 1, fromState[1]};
+    // cout << "Tile to left: "; printState(tileToLeft); cout << endl;
     return tileToLeft;
 }
 
 state GridWorld::getTileToRight(state fromState) {
     state tileToRight = {fromState[0] + 1, fromState[1]};
+    // cout << "Tile to right: "; printState(tileToRight); cout << endl;
     return tileToRight;
 }
 
@@ -253,7 +267,7 @@ action GridWorld::flipClockwize(action moveDirection) {
     return moveDirection;
 }
 
-void GridWorld::displayGridWorld() {
+void GridWorld::display() {
     for (int y = m_dimension-1;  y >= 0; y-- ) {
         for (int x = 0; x < m_dimension; x++) {
             state tile {x,y};
@@ -279,7 +293,7 @@ void GridWorld::displayRewardMap() {
     }
 }
 
-void displayPolicyGrid(valueMap V) {
+void displayValueGrid(valueMap V) {
     if (!isSquareSet(V)) {
         cout << "Policy map must be square grid" << endl;
         return;

@@ -4,11 +4,22 @@ ValueIteration::ValueIteration() {
 
 }
 
-ValueIteration::~ValueIteration() {
+ValueIteration::ValueIteration(MDP mdp, float gamma, float threshold) 
+: m_mdp(mdp), m_gamma(gamma), m_threshold(threshold) 
+{
 
 }
 
+ValueIteration::~ValueIteration() {
+    
+}
+
+bool ValueIteration::verifyOwnerMatch(Agent owner) {
+    return (m_mdp.getSize() == owner.getMdp().getSize());
+}
+
 void ValueIteration::run() {
+    cout << "Running algorithm: value iteration" << endl;
     stateSpace S = m_mdp.getStateSpace();
     transitionMap T = m_mdp.getTransitionMap();
     actionSpace A = m_mdp.getActionSpace();
@@ -30,15 +41,35 @@ void ValueIteration::run() {
         numberOfIterations++;
     }
     cout << "Terminated after: " <<  numberOfIterations << " iterations" << endl;
+    cout << "Value map size before set to agent: " << V.size() << endl;
+    if (m_hasOwner) {
+        m_owner->setValueMap(V);
+    }
+    m_V = V;
+    m_hasRun = true;
 }
 
-valueMap zeroInitializeValueMap(stateSpace S) {
-    valueMap V;
-    for (auto stateIt = S.begin(); stateIt != S.end(); stateIt++) {
-        V.insert(pair<state,double>(*stateIt, 0));
+void ValueIteration::derivePolicyFromValueMap() {
+    if (!m_hasRun) {
+        cout << "Unable to derive policy, algorithm has not been run." << endl; 
+        return;
     }
-    return V;
+    policy Pi;
+    stateSpace S = m_mdp.getStateSpace();
+    actionSpace A = m_mdp.getActionSpace();
+    transitionMap T = m_mdp.getTransitionMap();
+    rewardMap R = m_mdp.getRewardMap();
+    for (auto fromStateIt = S.begin(); fromStateIt != S.end(); fromStateIt++) {
+        state fromState = *fromStateIt;
+        action bestAction = argMaxExpectedValue(A, S, fromState, T, R, m_V, m_gamma);
+        Pi[fromState] = bestAction;  
+    }
+    if (m_hasOwner) {
+        m_owner->setPolicy(Pi);
+    }
+    
 }
+
 
 void printValueMap(valueMap V) {
     for (auto mapIterator = V.begin(); mapIterator != V.end(); mapIterator++) {

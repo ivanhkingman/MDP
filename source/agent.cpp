@@ -16,32 +16,44 @@ void Agent::setMDP (MDP mdp) {
 }
 
 void Agent::executeAction(action action) {
-    m_environment.reactToAction(action);
+    m_environment->reactToAction(action);
 }
 
 void Agent::collectReward() {
-    double collectedReward = m_environment.giveReward();
+    double collectedReward = m_environment->giveReward();
     m_totalReward += collectedReward;
 }
 
 void Agent::observeState() {
-    m_stateEstimate = m_environment.getState();
+    m_stateEstimate = m_environment->getState();
 }
 
 void Agent::printStateEstimate() {
     
 }
 
-void Agent::deployInEnvironment(Environment environment) {
-    m_environment = environment;
+void Agent::deployInEnvironment(Environment &environment) {
+    m_environment = &environment;
 }
 
-void Agent::attatchAlgorithm(Algorithm &algorithm) {
-    m_algorithm = algorithm;
+void Agent::attatchAlgorithm() {
+    // m_algorithm = algorithm;
+}
+
+void Agent::setValueMap(valueMap V) {
+    m_V = V;
+}
+
+void Agent::setPolicy(policy Pi) {
+    m_Pi = Pi;
 }
 
 state Agent::getStateEstimate() {
     return m_stateEstimate;
+}
+
+valueMap Agent::getValueMap() {
+    return m_V;
 }
 
 double Agent::getReward(){
@@ -56,6 +68,14 @@ policy Agent::getPolicy() {
     return m_Pi;
 }
 
+MDP Agent::getMdp() {
+    return m_mdp;
+}
+
+Environment Agent::getEnvironment( ) {
+    return *m_environment;
+}
+
 void invokeAlgorithm() {
-    m_algorithm.run();
+    // m_algorithm.run();
 }

@@ -13,8 +13,10 @@ class GridWorld : public Environment {
         void generateGridWorldTransitionMap();
 
         //! Display functions
-        void displayGridWorld();
+        void display();
         void displayRewardMap();
+
+        void reset();
 
     private:
         bool isOnUpperEdge(state state);

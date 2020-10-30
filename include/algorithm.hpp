@@ -1,31 +1,31 @@
 #pragma once
 
-#include <map>
-#include <vector>
 #include <iostream>
 #include <cstdlib>
+#include <float.h>
 
 #include "mdp.hpp"
 #include "agent.hpp"
-#include <float.h>
 
 using namespace std;
-using stateActionPair = pair<state, action>;
-using policy = map<state, action>;                              // P : S    -> A
-using valueMap = map<state, double>;                            // V : S    -> Real
-using stateActionValueMap = map<stateActionPair, double>;       // Q : SxA  -> Real
 
 class Algorithm {
     public:
         Algorithm();
         ~Algorithm();
-    
-    private:
+
+
+        void setOwner(Agent &owner);
+        void detatchOwner();
         virtual void run();
+    
+    protected:
+        Agent* m_owner;
         bool m_hasRun = false;
         bool m_hasOwner = false;
-        Agent owner;
-
+        
+        virtual bool verifyOwnerMatch(Agent owner);
+    
 };
 
 
@@ -39,7 +39,7 @@ void printPolicy(policy Pi);
 void printStateActionValueMap(stateActionValueMap Q);
 void printValueMap(valueMap V);
 
-
+valueMap zeroInitializeValueMap(stateSpace S);
 
 //---
 

@@ -2,56 +2,75 @@
 
 #include <iostream>
 
-void letUserPlayGridWorld(Agent agent, MDP myMDP, int moves, GridWorld gridWorld) {
+/*
+void letUserPlayGridWorld(GridWorld gridWorld, int nTurns) {
     gridWorld.displayRewardMap();
-    gridWorld.displayGridWorld();
+    gridWorld.display();
+
+    Agent user;
+    MDP mdp = gridWorld.stealMdp();
+    user.setMDP(mdp);
+
+    user.deployInEnvironment(gridWorld);
+
     int turnCounter = 0;
-    while(turnCounter < moves) {
+    while(turnCounter < nTurns) {
         string userInput;
         cin >> userInput;
         if (userInput == "w") {
-            agent.executeAction(UP);
+            user.executeAction(UP);
         }
         if (userInput == "s") {
-            agent.executeAction(DOWN);
+            user.executeAction(DOWN);
         }
         if (userInput == "a") {
-            agent.executeAction(LEFT);
+            user.executeAction(LEFT);
         }
         if (userInput == "d") {
             turnCounter++;
             userInput = "_";
-            agent.executeAction(RIGHT);
+            user.executeAction(RIGHT);
         }
         if (userInput == "e") {
             break;
         }
-        processTurn(turnCounter, userInput, agent, gridWorld);
+        processTurn(turnCounter, userInput, user, gridWorld);
     }
-    double agentReward = agent.getReward();
-    cout << "You accumulated reward: " << agent.getReward() << endl;
+    double agentReward = user.getReward();
+    cout << "You accumulated reward: " << user.getReward() << endl;
+}
+*/
+
+
+
+void letAgentPlayGridWorld(Agent myAgent, GridWorld gridWorld, int maxTurns) {
+    int turns = 0;
+    while (turns < maxTurns) {
+        myAgent.observeState();
+        state currentState = myAgent.getStateEstimate();
+        action nextAction = myAgent.getPolicy().at(currentState);
+        myAgent.executeAction(nextAction);
+        myAgent.observeState();
+        myAgent.collectReward();
+        cout << "Agent state-estimate: " << endl;
+        printState(myAgent.getStateEstimate()); cout << endl;
+        cout << "Real state: " << endl;
+        printState(gridWorld.getState()); cout << endl;
+        gridWorld.display();
+        turns++;
+    }
+    cout << "Agent accumulated reward: " << myAgent.getReward() << endl;
+    cout << "Agent played with policy: " << endl;
+    displayPolicyGrid(myAgent.getPolicy());
 }
 
-void letAlgorithmPlayGridWorld(Agent agent, MDP myMDP, int moves, double gamma) {
-    agent.runAlgorithm();
-    for (int turn = 0; turn < moves; turn++) {
-        action nextMove = agent.getPolicy().at(agent.getStateEstimate());
-        agent.executeAction(nextMove);
-        agent.collectReward();
-    }
-
-    double agentReward = agent.getReward();
-    cout << "Value iteration algorithm accumulated reward: " << agent.getReward() << endl;
-    cout << "Agent used policy: " << endl;
-    displayPolicyGrid(agent.getPolicy());
-    agent.reset();
-
-}
-
-void processTurn(int &turnCounter, string userInput, Agent agent, GridWorld gridWorld) {
+void processTurn(int &turnCounter, string userInput, Agent &agent, GridWorld &gridWorld) {
     turnCounter++;
     userInput = "_";
-    gridWorld.displayGridWorld();
+    gridWorld.display();
     gridWorld.displayRewardMap();
     agent.collectReward();
+    agent.getStateEstimate();
+    cout << "=================" << endl;
 }
+

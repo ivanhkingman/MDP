@@ -77,3 +77,12 @@ bool operator < (const Transition &t1, const Transition &t2) {
 
     return false;
 }
+
+void printState(state st) {
+    cout << "[";
+    for (auto it = st.begin(); it != st.end(); it++) {
+        cout << st[*it] << ",";
+    } 
+    cout << "]";
+    
+}

@@ -1,5 +1,4 @@
 #include "algorithm.hpp"
-#include "valueiteration.hpp"
 
 Algorithm::Algorithm() {
 
@@ -8,6 +7,29 @@ Algorithm::Algorithm() {
 Algorithm::~Algorithm() {
     
 }
+
+void Algorithm::run() {};
+
+void Algorithm::setOwner(Agent &owner) {
+    if (m_hasOwner) {
+        cout << "Algorithm already has owner" << endl;
+        return;
+    }
+    if (!this->verifyOwnerMatch(owner)) {
+        cout << "Agent and algorithm have conflicting world views" << endl;
+        return;
+    }
+    cout << "Algorithm owner was set." << endl;
+    m_hasOwner = true;
+    m_owner = &owner;
+}
+
+void Algorithm::detatchOwner() {
+    m_owner = NULL;
+    delete m_owner;
+}
+
+bool Algorithm::verifyOwnerMatch(Agent owner) { return false; };
 
 double greatestExpectedValueSum(state fromState, actionSpace A, transitionMap T, stateSpace S, rewardMap R,valueMap V, double gamma) {
     double greatestExpectedValueSum = -DBL_MAX;
@@ -29,19 +51,7 @@ double greatestExpectedValueSum(state fromState, actionSpace A, transitionMap T,
 
 
 // Todo: Dont extract the members of MDP before passing them to argMaxExpectedValue, just send the whole MDP
-policy derivePolicyFromValueMap(valueMap V, MDP mdp, double gamma) {
-    policy derivedPolicy;
-    stateSpace S = mdp.getStateSpace();
-    actionSpace A = mdp.getActionSpace();
-    transitionMap T = mdp.getTransitionMap();
-    rewardMap R = mdp.getRewardMap();
-    for (auto fromStateIt = S.begin(); fromStateIt != S.end(); fromStateIt++) {
-        state fromState = *fromStateIt;
-        action bestAction = argMaxExpectedValue(A, S, fromState, T, R, V, gamma);
-        derivedPolicy[fromState] = bestAction;  
-    }
-    return derivedPolicy;
-}
+
 
 // Todo: Dont extract the members of MDP before passing them to argMaxExpectedValue, just send the whole MDP
 action argMaxExpectedValue(actionSpace A, stateSpace S, state fromState, transitionMap T, rewardMap R, valueMap V, double gamma) {
@@ -208,4 +218,12 @@ string stateToString(state state) {
     string stateAsString;
 
     return stateAsString;
+}
+
+valueMap zeroInitializeValueMap(stateSpace S) {
+    valueMap V;
+    for (auto stateIt = S.begin(); stateIt != S.end(); stateIt++) {
+        V.insert(pair<state,double>(*stateIt, 0));
+    }
+    return V;
 }

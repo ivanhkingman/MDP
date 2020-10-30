@@ -6,12 +6,13 @@
 
 #include "environment.hpp"
 #include "mdp.hpp"
-#include "algorithm.hpp"
+
 
 using namespace std;
 
 using state = vector<int>;
 using action = int;
+
 
 class Agent {
 public:
@@ -28,15 +29,21 @@ public:
     double getReward();
     Environment getEnvironment();
     policy getPolicy();
+    valueMap getValueMap();
+    MDP getMdp();
 
     void followPolicy();
     
-    void deployInEnvironment(Environment environment);
-    void attatchAlgorithm(Algorithm &algorithm);
+
+    void deployInEnvironment(Environment &environment);
+    void attatchAlgorithm();
     void setMDP(MDP mdp);
+    void setValueMap(valueMap V);
+    void setPolicy(policy Pi);
     void reset();
 
-private:
+protected:
+    Environment* m_environment;
     state m_stateEstimate;
     MDP m_mdp;
     policy m_Pi;
@@ -44,8 +51,8 @@ private:
     stateActionValueMap m_Q;
     int m_n;
 
-    Environment m_environment;
-    Algorithm m_algorithm;
+    
+
 
     double m_totalReward;
 };

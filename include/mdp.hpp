@@ -1,9 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <vector>
-#include <map>
-#include <set>
+
 #include "transition.hpp"
 
 using namespace std;

@@ -7,11 +7,10 @@ using namespace std;
 #include <vector>
 #include <iostream>
 #include <random>
-#include <ctime>
+#include <time.h>
+#include <cstdlib>
 
 #include "mdp.hpp"
-#include "algorithm.hpp"
-
 
 enum actions {UP, DOWN, LEFT, RIGHT};
 
@@ -22,11 +21,13 @@ class Environment {
 
         virtual void reactToAction(action a);
         void generateRandomRewardMap(int from, int to);
+        virtual void display();
         state getState();
         double giveReward();
         MDP stealMdp();
 
     protected:
+        state m_s0;
         state m_state;
         stateSpace m_S;
         transitionMap m_T;
@@ -36,6 +37,5 @@ class Environment {
 
 
 void fillIncompleteTransitionMap(transitionMap &T, actionSpace A, stateSpace S);
-// Todo: Add function to verify axioms of probability for transition maps
 
 
