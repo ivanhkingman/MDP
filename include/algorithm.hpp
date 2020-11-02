@@ -30,7 +30,7 @@ class Algorithm {
 
 
 // Methods commonly used by different aglorithms
-double maximizeValueOverAction(valueMap V, MDP mdp, state fromState, action withAction, double gamma);
+double maximizeValueOverAction(valueMap V, MDP mdp, state fromState, action withAction, float gamma);
 double greatestExpectedValueSum(state fromState, actionSpace A, transitionMap T, stateSpace S, rewardMap R, valueMap V, double gamma);
 action argMaxExpectedValue(actionSpace A, stateSpace S, state fromState, transitionMap T, rewardMap R, valueMap V, double gamma);
 
@@ -39,14 +39,10 @@ void printPolicy(policy Pi);
 void printStateActionValueMap(stateActionValueMap Q);
 void printValueMap(valueMap V);
 
+// Zero initializations
 valueMap zeroInitializeValueMap(stateSpace S);
-
-//---
-
-//! Policy iteration
-policy policyIteration(MDP mpd, double gamma, double threshold);
 policy zeroInitializePolicy(const stateSpace S);
-valueMap policyEvaluation(MDP mdp, policy Pi, double threshold, double gamma);
+
 
 //! Q-learning
 stateActionValueMap Q_learning(stateSpace S, actionSpace A); 

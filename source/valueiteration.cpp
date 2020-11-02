@@ -41,19 +41,19 @@ void ValueIteration::run() {
         numberOfIterations++;
     }
     cout << "Terminated after: " <<  numberOfIterations << " iterations" << endl;
-    cout << "Value map size before set to agent: " << V.size() << endl;
     if (m_hasOwner) {
         m_owner->setValueMap(V);
     }
     m_V = V;
+    derivePolicyFromValueMap();
     m_hasRun = true;
 }
 
 void ValueIteration::derivePolicyFromValueMap() {
-    if (!m_hasRun) {
+    /*if (!m_hasRun) {
         cout << "Unable to derive policy, algorithm has not been run." << endl; 
         return;
-    }
+    }*/
     policy Pi;
     stateSpace S = m_mdp.getStateSpace();
     actionSpace A = m_mdp.getActionSpace();
