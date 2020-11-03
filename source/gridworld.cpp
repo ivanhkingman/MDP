@@ -35,12 +35,12 @@ void GridWorld::reactToAction(action move) {
         return;
     }
     if ((p + (not_p)/2) > diceRoll) {
-        cout << "Move failed, flipping clockwize" << endl;
+        // cout << "Move failed, flipping clockwize" << endl;
         move = flipClockwize(move);
         executeMove(move);
         return;
     } else {
-        cout << "Move failed, flipping counter-clockwize" << endl;
+        // cout << "Move failed, flipping counter-clockwize" << endl;
         move = flipCounterClockwize(move);
         executeMove(move);
         return;
@@ -49,40 +49,40 @@ void GridWorld::reactToAction(action move) {
 
 void GridWorld::executeMove(action move) {
     if ((isOnUpperEdge(m_state)) && move== UP) {
-        cout << "Tried to move up out of the map. Stayed in place" << endl;
+        // cout << "Tried to move up out of the map. Stayed in place" << endl;
         return;
     }
     if ((isOnLowerEdge(m_state)) && move == DOWN) {
-        cout << "Tried to move down out of the map. Stayed in place" << endl;
+        // cout << "Tried to move down out of the map. Stayed in place" << endl;
         return;
     }
     if ((isOnLeftEdge(m_state)) && move == LEFT) {
-        cout << "Tried to move left out of the map. Stayed in place" << endl;
+        // cout << "Tried to move left out of the map. Stayed in place" << endl;
         return;
     }
     if ((isOnRightEdge(m_state)) && move == RIGHT) {
-        cout << "Tried to move right out of the map. Stayed in place" << endl;
+        // cout << "Tried to move right out of the map. Stayed in place" << endl;
         return;
     }
 
     switch(move) {
         case UP:
-            cout << "Moving up" << endl;
+            // cout << "Moving up" << endl;
             m_state = getTileAbove(m_state);
             // cout << "State after switch: "; printState(m_state); cout << endl;
             break;
         case DOWN:
-            cout << "Moving down" << endl;
+            // cout << "Moving down" << endl;
             m_state = getTileBelow(m_state);
             // cout << "State after switch: "; printState(m_state); cout << endl;
             break;
         case LEFT:
-            cout << "Moving left" << endl;
+            // cout << "Moving left" << endl;
             m_state = getTileToLeft(m_state);
             // cout << "State after switch: "; printState(m_state); cout << endl;
             break;
         case RIGHT:
-            cout << "Moving right" << endl;
+            // cout << "Moving right" << endl;
             m_state = getTileToRight(m_state);
             // cout << "State after switch: "; printState(m_state); cout << endl;
             break;

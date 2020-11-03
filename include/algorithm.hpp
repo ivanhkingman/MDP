@@ -33,6 +33,8 @@ class Algorithm {
 double maximizeValueOverAction(valueMap V, MDP mdp, state fromState, action withAction, float gamma);
 double greatestExpectedValueSum(state fromState, actionSpace A, transitionMap T, stateSpace S, rewardMap R, valueMap V, double gamma);
 action argMaxExpectedValue(actionSpace A, stateSpace S, state fromState, transitionMap T, rewardMap R, valueMap V, double gamma);
+double maximizeValueOverActionAndState(stateActionValueMap Q, state fromState, actionSpace A);
+action selectRandomAction(actionSpace A);
 
 // Print various sets
 void printPolicy(policy Pi);

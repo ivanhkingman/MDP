@@ -29,7 +29,7 @@ void Algorithm::detatchOwner() {
     delete m_owner;
 }
 
-bool Algorithm::verifyOwnerMatch(Agent owner) { return false; };
+bool Algorithm::verifyOwnerMatch(Agent owner) { return true; };
 
 double greatestExpectedValueSum(state fromState, actionSpace A, transitionMap T, stateSpace S, rewardMap R,valueMap V, double gamma) {
     double greatestExpectedValueSum = -DBL_MAX;
@@ -46,6 +46,19 @@ double greatestExpectedValueSum(state fromState, actionSpace A, transitionMap T,
     if (expectedValueSum > greatestExpectedValueSum) {greatestExpectedValueSum = expectedValueSum;}
     }
     return greatestExpectedValueSum;
+}
+
+double maximizeValueOverActionAndState(stateActionValueMap Q, state fromState, actionSpace A) {
+    double greatestExpectedQValue = -DBL_MAX;
+    for (auto actionIt = A.begin(); actionIt != A.end(); actionIt++) {
+        action action = *actionIt;
+        stateActionPair state_action(fromState, action);
+        double expectedQValue = Q.at(state_action);
+        if (expectedQValue > greatestExpectedQValue) {
+            greatestExpectedQValue = expectedQValue;
+        }
+    }
+    return greatestExpectedQValue;
 }
 
 // Todo: Dont extract the members of MDP before passing them to argMaxExpectedValue, just send the whole MDP
@@ -69,6 +82,13 @@ action argMaxExpectedValue(actionSpace A, stateSpace S, state fromState, transit
     return bestAction;
 }
 
+// Select random action uniformly distributed
+action selectRandomAction(actionSpace A) {
+    unsigned int numActions = A.size();
+    action randomAction = rand() % numActions;
+    return randomAction;
+}
+
 void printPolicy(policy Pi) {
     for (auto mapIt = Pi.begin(); mapIt != Pi.end(); mapIt++) {
         state st = mapIt->first;
@@ -84,47 +104,6 @@ policy zeroInitializePolicy(const stateSpace S) {
         Pi.insert(pair<state, action>(*stateIt, 0));
     }
     return Pi;
-}
-
-
-stateActionValueMap Q_learning(stateSpace S, actionSpace A, state s0) {
-    stateActionValueMap Q = zeroInitializeQ(S, A);
-    int episodes;
-    
-    for (int e = 0; e < episodes; e++) {
-        state s = s0;
-        bool reachedGoalState = false;
-        while (!reachedGoalState) {
-            bool exploit = true;
-            if (exploit) {
-                double bestValue = -DBL_MAX;
-                action bestAction;
-                for (auto actionIt = A.begin(); actionIt != A.end(); actionIt++) {
-                    action a = *actionIt;
-                    stateActionPair stateAction(s0, a);
-                    double value = Q.at(stateAction);
-                    if (value > bestValue) {bestValue = value; bestAction = a;}
-                }
-            } else {
-                // find another action
-            }
-            // perform action (either best or random)
-                // how to perform action? pass message? invoke behavior in agent?
-                // should agent be passed as parameter to function -- hmm
-                // or return action, then run function again
-
-            // observe new state, collect reward
-                // I think algorithm and environment should be kept separate
-                // Therefore, agent is the one who observes state, then informs algorithm
-
-            // conclusion: This algorithm needs to communicate with the agent
-                // need to work on agent class to make algorithm a member variable of agent
-                // need to make environment a class...
-
-        }
-    }
-
-    return Q;
 }
 
 stateActionValueMap zeroInitializeQ(stateSpace S, actionSpace A) {

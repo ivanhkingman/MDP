@@ -27,18 +27,21 @@ public:
 
     state getStateEstimate();
     double getReward();
+    float getPreviousReward();
     Environment getEnvironment();
     policy getPolicy();
     valueMap getValueMap();
     MDP getMdp();
 
     void followPolicy();
+    void updatePolicy(state s, action a);
     
 
     void deployInEnvironment(Environment &environment);
     void attatchAlgorithm();
     void setMDP(MDP mdp);
     void setValueMap(valueMap V);
+    void setQValueMap(stateActionValueMap Q);
     void setPolicy(policy Pi);
     void reset();
 
@@ -51,8 +54,6 @@ protected:
     stateActionValueMap m_Q;
     int m_n;
 
-    
-
-
     double m_totalReward;
+    double m_previousReward;
 };

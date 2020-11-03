@@ -21,6 +21,7 @@ void Agent::executeAction(action action) {
 
 void Agent::collectReward() {
     double collectedReward = m_environment->giveReward();
+    m_previousReward = collectedReward;
     m_totalReward += collectedReward;
 }
 
@@ -44,8 +45,17 @@ void Agent::setValueMap(valueMap V) {
     m_V = V;
 }
 
+void Agent::setQValueMap(stateActionValueMap Q) {
+    m_Q = Q;
+}
+
 void Agent::setPolicy(policy Pi) {
     m_Pi = Pi;
+
+}
+
+void Agent::updatePolicy(state s, action a) {
+    m_Pi.at(s) = a;
 }
 
 state Agent::getStateEstimate() {
@@ -58,6 +68,10 @@ valueMap Agent::getValueMap() {
 
 double Agent::getReward(){
     return m_totalReward;
+}
+
+float Agent::getPreviousReward() {
+    return m_previousReward;
 }
 
 void Agent::reset() {
